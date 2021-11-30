@@ -1,0 +1,985 @@
+# NOTE: this file needs to be pre-pocessed before importing in AWS API Gateway
+# Online pre-processor: https://onlineyamltools.com/convert-yaml-to-json
+openapi: 3.0.0
+x-definitions:
+  Amazon:
+    type: object
+    x-amazon-apigateway-integration: &x-amazon-apigateway-integration
+      type: aws
+      httpMethod: POST
+      uri: arn:aws:apigateway:${REGION}:lambda:path/2015-03-31/functions/${DEVICE_TYPE_LAMBDA_ARN}/invocations
+      credentials: ${EXECUTION_ROLE_ARN}
+      requestTemplates:
+        application/json: |-
+          #set($inputRoot = $input.path('$'))
+          #set($allParams = $input.params())
+          #set( $convert = {
+            "name": "Name",
+            "primaryUom": "sitetracker__Primary_UoM__c",
+            "category": "sitetracker__Category__c",
+            "subcategory": "sitetracker__Sub_Category__c",
+            "type": "sitetracker__Type__c",
+            "subtype": "Sub_type__c",
+            "status": "Available_for_Use__c",
+            "trackingMethod": "sitetracker__Tracking_Method__c",
+            "usageType": "sitetracker__Usage_Type__c",
+            "beginOfLife": "Begin_of_Life__c",
+            "endOfLife": "End_of_Life__c",
+            "endOfService": "End_of_Service__c",
+            "dimensionWeight": "sitetracker__Weight__c",
+            "dimensionWidth": "sitetracker__Width__c",
+            "dimensionHeight": "sitetracker__Height__c",
+            "dimensionLength": "sitetracker__Length__c",
+            "dimensionUnit": "sitetracker__Dimensions_Unit__c",
+            "powerConsumption": "Maximum_Power_Consumption__c",
+            "coolingCapacity": "Cooling_Capacity__c",
+            "market": "Market__c"
+            })
+          {
+            "body-json" : {
+            #foreach($key in $inputRoot.keySet())
+              #if($convert[$key] != "")
+              "$convert[$key]" : "$inputRoot[$key]"
+              #else
+              "$key": "$inputRoot[$key]"
+              #end
+              #if( $foreach.hasNext ),#end
+            #end
+            },
+            "params" : {
+            #foreach($type in $allParams.keySet())
+              #set($params = $allParams.get($type))
+            "$type" : {
+              #foreach($paramName in $params.keySet())
+              "$paramName" : "$util.escapeJavaScript($params.get($paramName))"
+              #if($foreach.hasNext),#end
+              #end
+            }
+              #if($foreach.hasNext),#end
+            #end
+            },
+            "context" : {
+              "http-method" : "$context.httpMethod",
+              "request-id" : "$context.requestId",
+              "resource-path" : "$context.resourcePath",
+              "secret-arn" : "/SiteTracker/Credentials"
+            }
+          }
+      responses:
+        default:
+          statusCode: "500"
+          responseTemplates:
+            application/json: |-
+              #set($inputRoot = $input.path('$'))
+              #if($inputRoot.statusCode != "")
+                  #set($context.responseOverride.status = $inputRoot.statusCode)
+                  $input.json("$.body")
+              #else
+                  $input.json("$")
+              #end
+      passthroughBehavior: when_no_templates
+servers:
+  - url: https://apiplatform.com/1.0.0
+info:
+  description: This is the OpenAPI 3.0 specification of the API Integration Platform for Device Types.
+  version: 1.0.0
+  title: Device Type
+tags:
+  - name: deviceType
+    description: Device Type
+x-amazon-apigateway-request-validators:
+  full:
+    validateRequestBody: true
+    validateRequestParameters: true
+  body-only:
+    validateRequestBody: true
+    validateRequestParameters: false
+x-amazon-apigateway-request-validator: "full"
+paths:
+  /deviceType:
+    post:
+      x-amazon-apigateway-request-validator: full
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - deviceType
+      summary: Creates a Device Type
+      description: This operation creates a Device Type entity
+      operationId: createDeviceType
+      requestBody:
+        description: The Device type to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceTypeCreate"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceType"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+    get:
+      x-amazon-apigateway-request-validator: full
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - deviceType
+      summary: List or find Device Types objects
+      description: This operation list of find Device Types
+      operationId: listDeviceTypes
+      parameters:
+        - name: fields
+          description: Comma-separated properties to be provided in response
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          headers:
+           totalSize: 
+            schema:
+              type: integer
+            description: Actual number of items returned in the response body
+           done:
+            schema:
+             type: boolean
+            description: Flag to inform if all items were returned in the response body
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceType"
+        "206":
+          description: Partial Content
+          headers:
+           totalSize: 
+            schema:
+              type: integer
+            description: Actual number of items returned in the response body
+           done:
+            schema:
+             type: boolean
+            description: Flag to inform if all items were returned in the response body
+           nextRecordsUrl:
+            schema:
+             type: string
+             format: uri
+            description: URI to the next record page.
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+  /deviceType/{id}:
+    get:
+      x-amazon-apigateway-request-validator: full
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - deviceType
+      summary: Retrieves a DeviceType by ID
+      description: This operation retrieves a DeviceType entity. Attribute selection is enabled for all first level attributes.
+      operationId: retrieveDeviceType
+      parameters:
+        - name: id
+          description: Identifier of the DeviceType
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: fields
+          description: Comma-separated properties to be provided in response
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceType"
+        "206":
+          description: Partial Content
+          headers:
+           totalSize: 
+            schema:
+              type: integer
+            description: Actual number of items returned in the response body
+           done:
+            schema:
+             type: boolean
+            description: Flag to inform if all items were returned in the response body
+           nextRecordsUrl:
+            schema:
+             type: string
+             format: uri
+            description: URI to the next record page.
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+    patch:
+      x-amazon-apigateway-request-validator: full
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - deviceType
+      summary: Updates partially a Device Type
+      description: This operation updates partially a Device Type entity
+      operationId: patchDeviceType
+      parameters:
+        - name: id
+          in: path
+          description: Identifier of the Device Type
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The Device Type to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceTypeUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceType"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    DeviceType:
+      type: object
+      description: The root entity for Device Type.
+      properties:
+        id:
+          description: Unique identifier of the Device Type
+          type: string
+          minLength: 1
+          maxLength: 18
+          example: a3S0D000000WhCGUA0
+        href:
+          description: Unique reference of the Device Type
+          type: string
+        "@baseType":
+          description: When sub-classing, this defines the super-class
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name
+          type: string
+        name:
+          description: Name of the Device Type
+          type: string
+          minLength: 1
+          maxLength: 70
+          example: Device Type Name
+        primaryUom:
+          description: Unit of measure used when the item is consumed
+          type: string
+          enum:
+            - Each
+            - Box
+            - Feet
+            - Meters
+            - Hours
+            - Days
+          example: Each
+        category:
+          type: array
+          items: 
+            $ref: "#/components/schemas/Category"
+          description: List of root categories contained in this Device Type
+        subcategory:
+          type: array
+          items: 
+            $ref: "#/components/schemas/SubCategory"
+          description: List of root subcategories contained in this Device Type
+        type:
+          description: The type of Item. Only Material and Tool/Equipment can be made Available for Receipt and require a Usage Type and Tracking Method. Other Types (Labor, Service, Expense) cannot use those fields
+          type: string
+          enum:
+            - Material
+            - Tool/Equipment
+            - Labor
+            - Service
+            - Expense
+            - Standard System
+          example: Material
+        subtype:
+          description: Optional field that falls within the hierarchy of the "Type" chosen for this record
+          type: string
+          maxLength: 155
+        status:
+          description: Indicates whether the item is available for use, or whether it is available for use under special permission from the lifecycle manager
+          type: string
+          enum:
+            - Yes
+            - No
+            - Yes with confirmation from Lifecycle Manager
+          example: Yes
+        trackingMethod:
+          description: Indicates whether the item is available for use, or whether it is available for use under special permission from the lifecycle manager
+          type: string
+          enum:
+            - Uniquely Tracked
+            - Quantity Tracked
+            - Container Tracked
+          example: Container Tracked
+        usageType:
+          description: Indicates whether the item is available for use, or whether it is available for use under special permission from the lifecycle manager
+          type: string
+          enum:
+            - Installable
+            - Consumable
+            - Tool/Equipment
+          example: Installable
+        beginOfLife:
+          description: Date this item was manufactured or certificate
+          type: string
+          format: date-time
+          example: "2021-01-30T08:30:00Z"
+        endOfLife:
+          description: The expiration date of this item
+          type: string
+          format: date-time
+          example: "2021-01-30T08:30:00Z"
+        endOfService:
+          description: Date that the item has been discontinued. End of Service of this item. If applicable
+          type: string
+          format: date-time
+          example: "2021-01-30T08:30:00Z"
+        dimensionWeight:
+          description: The weight of the item in kilograms. Number (16 int, 2 decimal)
+          type: number
+          format: double
+        dimensionWidth:
+          description: The Width of the item. Width, Height, Depth and Diameter need to have the same dimension unit, as fixed in the field "General Dimensions Unit". Number (16 int, 2 decimal)
+          type: number
+          format: double
+        dimensionHeight:
+          description: The Height of the item. Height, Width, Depth and Diameter need to have the same dimension unit, as fixed in the field "General Dimensions Unit". Number (16 int, 2 decimal)
+          type: number
+          format: double
+        dimensionLength:
+          description: Length of the Item (using Dimensions Unit). Number (16 int, 2 decimal)
+          type: number
+          format: double
+        dimensionUnit:
+          description: The unit of measure for the dimensions of the items fields height, width, and depth
+          type: string
+          enum:
+            - in
+            - ft
+            - mn
+            - cm
+            - m
+          example: cm
+        powerConsumption:
+          description: Maximum power consumption of an item (in Watt) for calculation of total power supply and total heat load. Number (12 int, 2 decimal)
+          type: number
+          format: double
+        coolingCapacity:
+          description: TGE cooling capacity of the item in British Temperature Unit (BTU - 1 Watt = 0,29351 BTU). Number (16 int, 2 decimal)
+          type: number
+          format: double
+        market:
+          description: Market this item belongs to.
+          type: string
+          enum:
+            - CZ
+            - DE
+            - ES
+            - GR
+            - HU
+            - IE
+            - PT
+            - RO
+            - VF
+          example: PT
+        relatedParty:
+          type: array
+          items: 
+            $ref: "#/components/schemas/RelatedParty"
+          description: List of parties involved with the Device Type
+    DeviceTypeCreate:
+      type: object
+      description: The root entity for Device Type. Skipped properties - id, href
+      required:
+        - name
+        - primaryUom
+        - category
+        - subcategory
+        - type
+        - subtype
+        - status
+        - trackingMethod
+        - usageType
+      properties:
+        "@baseType":
+          description: When sub-classing, this defines the super-class
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name
+          type: string
+        name:
+          description: Name of the Device Type
+          type: string
+          minLength: 1
+          maxLength: 70
+          example: Device Type Name
+        primaryUom:
+          description: Unit of measure used when the item is consumed
+          type: string
+          enum:
+            - Each
+            - Box
+            - Feet
+            - Meters
+            - Hours
+            - Days
+          example: Each
+        category:
+          type: array
+          items: 
+            $ref: "#/components/schemas/Category"
+          description: List of root categories contained in this Device Type
+        subcategory:
+          type: array
+          items: 
+            $ref: "#/components/schemas/SubCategory"
+          description: List of root subcategories 
+        type:
+          description: The type of Item. Only Material and Tool/Equipment can be made Available for Receipt and require a Usage Type and Tracking Method. Other Types (Labor, Service, Expense) cannot use those fields
+          type: string
+          enum:
+            - Material
+            - Tool/Equipment
+            - Labor
+            - Service
+            - Expense
+            - Standard System
+        subtype:
+          description: Optional field that falls within the hierarchy of the "Type" chosen for this record
+          type: string
+          maxLength: 155
+        status:
+          description: Indicates whether the item is available for use, or whether it is available for use under special permission from the lifecycle manager
+          type: string
+          enum:
+            - Yes
+            - No
+            - Yes with confirmation from Lifecycle Manager
+          example: Yes
+        trackingMethod:
+          description: Indicates whether the item is available for use, or whether it is available for use under special permission from the lifecycle manager
+          type: string
+          enum:
+            - Uniquely Tracked
+            - Quantity Tracked
+            - Container Tracked
+          example: Container Tracked
+        usageType:
+          description: Indicates whether the item is available for use, or whether it is available for use under special permission from the lifecycle manager
+          type: string
+          enum:
+            - Installable
+            - Consumable
+            - Tool/Equipment
+          example: Installable
+        beginOfLife:
+          description: Date this item was manufactured or certificate
+          type: string
+          format: date-time
+          example: "2021-01-30T08:30:00Z"
+        endOfLife:
+          description: The expiration date of this item
+          type: string
+          format: date-time
+          example: "2021-01-30T08:30:00Z"
+        endOfService:
+          description: Date that the item has been discontinued. End of Service of this item. If applicable
+          type: string
+          format: date-time
+          example: "2021-01-30T08:30:00Z"
+        dimensionWeight:
+          description: The weight of the item in kilograms. Number (16 int, 2 decimal)
+          type: number
+          format: double
+        dimensionWidth:
+          description: The Width of the item. Width, Height, Depth and Diameter need to have the same dimension unit, as fixed in the field "General Dimensions Unit". Number (16 int, 2 decimal)
+          type: number
+          format: double
+        dimensionHeight:
+          description: The Height of the item. Height, Width, Depth and Diameter need to have the same dimension unit, as fixed in the field "General Dimensions Unit". Number (16 int, 2 decimal)
+          type: number
+          format: double
+        dimensionLength:
+          description: Length of the Item (using Dimensions Unit). Number (16 int, 2 decimal)
+          type: number
+          format: double
+        dimensionUnit:
+          description: The unit of measure for the dimensions of the items fields height, width, and depth
+          type: string
+          enum:
+            - in
+            - ft
+            - mn
+            - cm
+            - m
+          example: cm
+        powerConsumption:
+          description: Maximum power consumption of an item (in Watt) for calculation of total power supply and total heat load. Number (12 int, 2 decimal)
+          type: number
+          format: double
+        coolingCapacity:
+          description: TGE cooling capacity of the item in British Temperature Unit (BTU - 1 Watt = 0,29351 BTU). Number (16 int, 2 decimal)
+          type: number
+          format: double
+        market:
+          description: Market this item belongs to.
+          type: string
+          enum:
+            - CZ
+            - DE
+            - ES
+            - GR
+            - HU
+            - IE
+            - PT
+            - RO
+            - VF
+          example: PT
+        relatedParty:
+          type: array
+          items: 
+            $ref: "#/components/schemas/RelatedParty"
+          description: List of parties involved with the Device Type
+    DeviceTypeUpdate:
+      type: object
+      description: The root entity for Device Type. Skipped properties - id,href
+      properties:
+        "@baseType":
+          description: When sub-classing, this defines the super-class
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name
+          type: string
+        primaryUom:
+          description: Unit of measure used when the item is consumed
+          type: string
+          enum:
+            - Each
+            - Box
+            - Feet
+            - Meters
+            - Hours
+            - Days
+          example: Each
+        category:
+          type: array
+          items: 
+            $ref: "#/components/schemas/Category"
+          description: List of root categories contained in this Device Type
+        subcategory:
+          type: array
+          items: 
+            $ref: "#/components/schemas/SubCategory"
+          description: List of root subcategories contained in this Device Type
+        type:
+          description: The type of Item. Only Material and Tool/Equipment can be made Available for Receipt and require a Usage Type and Tracking Method. Other Types (Labor, Service, Expense) cannot use those fields
+          type: string
+          enum:
+            - Material
+            - Tool/Equipment
+            - Labor
+            - Service
+            - Expense
+            - Standard System
+          example: Material
+        subtype:
+          description: Optional field that falls within the hierarchy of the "Type" chosen for this record
+          type: string
+          maxLength: 155
+        status:
+          description: Indicates whether the item is available for use, or whether it is available for use under special permission from the lifecycle manager
+          type: string
+          enum:
+            - Yes
+            - No
+            - Yes with confirmation from Lifecycle Manager
+          example: Yes
+        trackingMethod:
+          description: Indicates whether the item is available for use, or whether it is available for use under special permission from the lifecycle manager
+          type: string
+          enum:
+            - Uniquely Tracked
+            - Quantity Tracked
+            - Container Tracked
+          example: Container Tracked
+        usageType:
+          description: Indicates whether the item is available for use, or whether it is available for use under special permission from the lifecycle manager
+          type: string
+          enum:
+            - Installable
+            - Consumable
+            - Tool/Equipment
+          example: Installable
+        beginOfLife:
+          description: Date this item was manufactured or certificate
+          type: string
+          format: date-time
+          example: "2021-01-30T08:30:00Z"
+        endOfLife:
+          description: The expiration date of this item
+          type: string
+          format: date-time
+          example: "2021-01-30T08:30:00Z"
+        endOfService:
+          description: Date that the item has been discontinued. End of Service of this item. If applicable
+          type: string
+          format: date-time
+          example: "2021-01-30T08:30:00Z"
+        dimensionWeight:
+          description: The weight of the item in kilograms. Number (16 int, 2 decimal)
+          type: number
+          format: double
+        dimensionWidth:
+          description: The Width of the item. Width, Height, Depth and Diameter need to have the same dimension unit, as fixed in the field "General Dimensions Unit". Number (16 int, 2 decimal)
+          type: number
+          format: double
+        dimensionHeight:
+          description: The Height of the item. Height, Width, Depth and Diameter need to have the same dimension unit, as fixed in the field "General Dimensions Unit". Number (16 int, 2 decimal)
+          type: number
+          format: double
+        dimensionLength:
+          description: Length of the Item (using Dimensions Unit). Number (16 int, 2 decimal)
+          type: number
+          format: double
+        dimensionUnit:
+          description: The unit of measure for the dimensions of the items fields height, width, and depth
+          type: string
+          enum:
+            - in
+            - ft
+            - mn
+            - cm
+            - m
+          example: cm
+        powerConsumption:
+          description: Maximum power consumption of an item (in Watt) for calculation of total power supply and total heat load. Number (12 int, 2 decimal)
+          type: number
+          format: double
+        coolingCapacity:
+          description: TGE cooling capacity of the item in British Temperature Unit (BTU - 1 Watt = 0,29351 BTU). Number (16 int, 2 decimal)
+          type: number
+          format: double
+        relatedParty:
+          description: List of parties involved with the Device Type
+          type: array
+          items: 
+            $ref: "#/components/schemas/RelatedParty"
+    RelatedParty:
+      type: object
+      description: A related party defines party or party role linked to the Device Type.
+      required:
+        - id
+        - "@refferedType"
+      properties:
+        id:
+          description: Unique identifier of the Related Party
+          type: string
+          minLength: 1
+          maxLength: 18
+        href:
+          description: Unique reference of Related Party
+          type: string
+        "@baseType":
+          description: When sub-classing, this defines the super-class
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name
+          type: string
+        name:
+          description: Name of the Related party
+          type: string
+          minLength: 1
+          maxLength: 80
+        role:
+          description: Role played by the Related Party
+          type: string
+          enum:
+            - Owner
+            - Manufacturer
+    Category:
+      type: object
+      description: The category is used to group Device Types. Categories can contain subcategories.
+      properties:
+        id:
+          description: Unique identifier of the Category
+          type: string
+          minLength: 1
+          maxLength: 18
+        href:
+          description: Unique reference of the Category
+          type: string
+        "@baseType":
+          description: When sub-classing, this defines the super-class
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name
+          type: string
+        name:
+          description: Name of the Category
+          type: string
+          minLength: 1
+          maxLength: 80
+    SubCategory:
+      type: object
+      description: The subcategory is used to group Device Types.
+      properties:
+        id:
+          description: Unique identifier of the SubCategory
+          type: string
+          minLength: 1
+          maxLength: 18
+        href:
+          description: Unique reference of the SubCategory
+          type: string
+        "@baseType":
+          description: When sub-classing, this defines the super-class
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name
+          type: string
+        name:
+          description: Name of the SubCategory
+          type: string
+          minLength: 1
+          maxLength: 80
+        category:
+          type: object
+          description: Categories of the subcategory.
+          items: 
+            $ref: "#/components/schemas/Category"
+    Error:
+      type: object
+      required:
+        - code
+        - reason
+      properties:
+        code:
+          description: Application relevant detail, defined in the API or a common list.
+          type: string
+        reason:
+          description: Explanation of the reason for the error which can be shown to a client user.
+          type: string
+        message:
+          description: More details and corrective actions related to the error which can be shown to a client user.
+          type: string
+        status:
+          description: HTTP Error code extension
+          type: string
+        referenceError:
+          description: URI of documentation describing the error.
+          type: string
+          format: uri
+        "@baseType":
+          description: When sub-classing, this defines the super-class.
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name.
+          type: string

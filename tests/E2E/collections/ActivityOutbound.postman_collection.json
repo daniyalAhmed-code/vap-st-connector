@@ -1,0 +1,198 @@
+{
+	"info": {
+		"_postman_id": "85bb7627-00c2-4506-9126-6160ee2018f5",
+		"name": "ActivityOutbound",
+		"description": "This API provides operations to create, update, and delete activities related to the project.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Good Requests",
+			"item": [
+				{
+					"name": "(root)",
+					"item": [
+						{
+							"name": "list Activity Outbound",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/{{basePath}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{basePath}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create Activity Outbound",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"accountId\": \"do\",\n    \"accountName\": \"enim qui Lorem non\",\n    \"id\": \"moll\",\n    \"name\": \"in deserunt\",\n    \"projectId\": \"occaecat\",\n    \"projectName\": \"sed in\",\n    \"type\": \"consequat deserunt cupidatat\",\n    \"@baseType\": \"deserunt in amet\",\n    \"@schemaLocation\": \"https://BKsGBdjyCyzfgYpbFdWTNNngX.xboPXZMXj8gZBAhNBgLgcE6syNO0qWw4jj.oHo0orD,-AevOzTSwuHZTW86i\",\n    \"@type\": \"do ea est ullamco\",\n    \"actualDate\": \"1970-04-26T06:21:40.443Z\",\n    \"forecastlDate\": \"2000-02-08T02:37:28.881Z\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/{{basePath}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{basePath}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "{id}",
+					"item": [
+						{
+							"name": "patch Activity Outbound",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"accountId\": \"est\",\n    \"accountName\": \"veniam\",\n    \"name\": \"sunt magna anim velit\",\n    \"projectId\": \"aute nisi sunt Ex\",\n    \"projectName\": \"Duis in\",\n    \"type\": \"anim Excepteur\",\n    \"@baseType\": \"Lorem pariatur\",\n    \"@schemaLocation\": \"http://mNgsReDmUdjyOrDBLKwoXB.xxH7DLicSD3eCNNblDzRi5,u8rr\",\n    \"@type\": \"dolor\",\n    \"actualDate\": \"1995-10-28T00:57:20.454Z\",\n    \"forecastlDate\": \"2004-01-10T13:17:52.424Z\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/{{basePath}}/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{basePath}}",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "mno",
+					"item": [
+						{
+							"name": "delete Activity Outbound",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/{{basePath}}/mno/:accountId/activity/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{basePath}}",
+										"mno",
+										":accountId",
+										"activity",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "accountId",
+											"value": "non nulla",
+											"description": "(Required) "
+										},
+										{
+											"key": "id",
+											"value": "non nulla",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Bad Requests",
+			"item": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "1Q2Hf68o0o9WfcJ6jwjx64ovAfZY7rqi8K4sJS8h",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://api.test.vantageapi.com"
+		},
+		{
+			"key": "basePath",
+			"value": "activityOutbound"
+		}
+	]
+}

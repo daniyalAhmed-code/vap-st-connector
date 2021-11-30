@@ -1,0 +1,11 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+  build:
+    commands:
+      - tflint --init && tflint --no-color --var-file="config/$TF_VAR_ENV.tfvars"
+  post_build:
+    commands:
+      - echo "terraform linter completed"

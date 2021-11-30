@@ -1,0 +1,76 @@
+{
+  "vap-st-categories": [
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Security Equipment"},
+          "SubCategory": {"S":"Alarm Management"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Security Equipment"},
+          "SubCategory": {"S":"Aviation Obstruction lights"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Security Equipment"},
+          "SubCategory": {"S":"Climbing Equipment"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Security Equipment"},
+          "SubCategory": {"S":"Fire Detection System"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Security Equipment"},
+          "SubCategory": {"S":"Fire Extinguishing System"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Security Equipment"},
+          "SubCategory": {"S":"Health & Safety"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Security Equipment"},
+          "SubCategory": {"S":"Intrusion Detection System"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Security Equipment"},
+          "SubCategory": {"S":"Locking System"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Additional Equipment"},
+          "SubCategory": {"S":"Additional System"}
+        }
+      }
+    }
+  ]
+}

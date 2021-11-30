@@ -1,0 +1,475 @@
+openapi: 3.0.0
+x-definitions:
+  x-amazon-apigateway-integration: &x-amazon-apigateway-integration
+  x-amazon-apigateway-gateway-responses: &x-amazon-apigateway-gateway-responses
+  x-amazon-apigateway-request-validators: &x-amazon-apigateway-request-validators
+  security: &security
+  securitySchemes: &securitySchemes
+  methodOptions: &methodsOptions
+  parametersFields: &parametersFields
+  parametersNext: &parametersNext
+servers:
+  - url: "https://api.test.vantageapi.com/{basePath}"
+    variables:
+      basePath:
+        default: "project"
+    x-amazon-apigateway-endpoint-configuration:
+      disableExecuteApiEndpoint: true
+info:
+  description: This API provides operations to update and close a Project.
+  version: 1.0.0
+  title: Project
+tags:
+  - name: project
+    description: Project
+x-amazon-apigateway-gateway-responses: *x-amazon-apigateway-gateway-responses
+x-amazon-apigateway-request-validators: *x-amazon-apigateway-request-validators
+x-amazon-apigateway-request-validator: "full"
+paths:
+  /:
+    get:
+      x-amazon-apigateway-request-validator: full
+      security: *security
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - project
+      summary: List or find Projects objects
+      description: This operation list or find Projects
+      operationId: listProjects
+      parameters:
+        - *parametersFields
+        - *parametersNext
+      responses:
+        "200":
+          description: Success
+          headers:
+            totalSize:
+              schema:
+                type: integer
+              description: Actual number of items returned in the response body
+            done:
+              schema:
+                type: boolean
+              description: Flag to inform if all items were returned in the response body
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+        "206":
+          description: Partial Content
+          headers:
+            totalSize:
+              schema:
+                type: integer
+              description: Actual number of items returned in the response body
+            done:
+              schema:
+                type: boolean
+              description: Flag to inform if all items were returned in the response body
+            nextRecordsUrl:
+              schema:
+                type: string
+                format: uri
+              description: URI to the next record page.
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+    options: *methodsOptions
+  /{id}:
+    get:
+      x-amazon-apigateway-request-validator: full
+      security: *security
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - project
+      summary: Retrieves a Project by ID
+      description: This operation retrieves a Project entity. Attribute selection is enabled for all first level attributes.
+      operationId: retrieveProject
+      parameters:
+        - name: id
+          description: Identifier of the Project
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: fields
+          description: Comma-separated properties to be provided in response
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+    patch:
+      x-amazon-apigateway-request-validator: full
+      security: *security
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - project
+      summary: Updates partially a Project
+      description: This operation updates partially a Project entity
+      operationId: patchProject
+      parameters:
+        - name: id
+          in: path
+          description: Identifier of the Project
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The Project to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+    options: *methodsOptions
+  /{id}/close:
+    post:
+      x-amazon-apigateway-request-validator: full
+      security: *security
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - project
+      summary: Closes a Project
+      description: This operation closes a Project entity
+      operationId: closeProject
+      parameters:
+        - name: id
+          in: path
+          description: Identifier of the Project
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The Project to be closed
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectClose"
+      responses:
+        "200":
+          description: Closed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+    options: *methodsOptions
+components:
+  schemas:
+    Project:
+      type: object
+      description: The root entity for Project.
+      properties:
+        id:
+          description: Unique identifier of the Project
+          type: string
+          minLength: 1
+          maxLength: 18
+          example: a3S0D000000WhCGUA0
+        href:
+          description: Unique reference of the Project
+          type: string
+        "@baseType":
+          description: When sub-classing, this defines the super-class
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name
+          type: string
+        name:
+          description: Name of the Project
+          type: string
+          minLength: 1
+          maxLength: 80
+          example: P-551463
+        externalId:
+          description: External Id of the project
+          type: string
+          minLength: 1
+          maxLength: 255
+        customerProjectManagerName:
+          description: Reference to user who is the manager of the project
+          type: string
+          minLength: 1
+          maxLength: 80
+        closeComment:
+          description: A section in which to post project comments
+          type: string
+          minLength: 1
+          maxLength: 255
+        closeDate:
+          description: Date sent by the MNO to be concatenated in the comment
+          type: string
+          format: date
+          example: "2021-01-30"
+    ProjectUpdate:
+      type: object
+      description: The root entity for Project. Skipped properties - id,href
+      required:
+        - name
+        - externalId
+        - customerProjectManagerName
+      properties:
+        name:
+          description: Name of the Project
+          type: string
+          minLength: 1
+          maxLength: 80
+        externalId:
+          description: External Id of the project
+          type: string
+          minLength: 1
+          maxLength: 255
+        customerProjectManagerName:
+          description: Reference to user who is the manager of the project
+          type: string
+          minLength: 1
+          maxLength: 80
+    ProjectClose:
+      type: object
+      description: The root entity for Project Close. Skipped properties - id,href
+      required:
+        - name
+        - externalId
+        - closeComment
+        - closeDate
+      properties:
+        name:
+          description: Name of the Project
+          type: string
+          minLength: 1
+          maxLength: 80
+        externalId:
+          description: External Id of the project
+          type: string
+          minLength: 1
+          maxLength: 255
+        closeComment:
+          description: A section in which to post project comments
+          type: string
+          minLength: 1
+          maxLength: 255
+        closeDate:
+          description: Date sent by the MNO to be concatenated in the comment
+          type: string
+          format: date
+          example: "2021-01-30"
+    Error:
+      type: object
+      required:
+        - code
+        - reason
+      properties:
+        code:
+          description: Application relevant detail, defined in the API or a common list.
+          type: string
+        reason:
+          description: Explanation of the reason for the error which can be shown to a client user.
+          type: string
+        message:
+          description: More details and corrective actions related to the error which can be shown to a client user.
+          type: string
+        status:
+          description: HTTP Error code extension
+          type: string
+        referenceError:
+          description: URI of documentation describing the error.
+          type: string
+          format: uri
+        "@baseType":
+          description: When sub-classing, this defines the super-class.
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name.
+          type: string
+  securitySchemes: *securitySchemes

@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "84c24302-f4b5-419f-8d61-ebe770cfc5a5",
+		"name": "ProjectOutbound",
+		"description": "This API provides operations to update and close a Project Outbound.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Good Requests",
+			"item": [
+				{
+					"name": "{external Project Id}",
+					"item": [
+						{
+							"name": "close",
+							"item": [
+								{
+									"name": "close Project Outbound",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"accountId\": \"aliqui\",\n    \"accountName\": \"in\",\n    \"closeDate\": \"1985-05-25T13:03:17.055Z\",\n    \"id\": \"nisi Lorem repre\",\n    \"name\": \"sed minim\",\n    \"@baseType\": \"ullamco nostrud occaecat\",\n    \"@schemaLocation\": \"https://p.nijGJdA31mPwZKIyrIkjtPysvz2Y7ylYNzclie-2r,PyFZO6YG34wZW.pgt2Eiqj.Xy\",\n    \"@type\": \"dolore mollit ex\",\n    \"closeComment\": \"s\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/{{basePath}}/:externalProjectId/close",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"{{basePath}}",
+												":externalProjectId",
+												"close"
+											],
+											"variable": [
+												{
+													"key": "externalProjectId",
+													"value": "laboris eu",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "retrieve Project Outbound",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/{{basePath}}/:externalProjectId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{basePath}}",
+										":externalProjectId"
+									],
+									"variable": [
+										{
+											"key": "externalProjectId",
+											"value": "laboris eu",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "patch Project Outbound",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"accountId\": \"exercitation \",\n    \"accountName\": \"amet dolore nulla officia consectetur\",\n    \"customerProjectManagerName\": \"culpa in\",\n    \"id\": \"anim id\",\n    \"name\": \"ad dolor\",\n    \"@baseType\": \"in ullamco adipisicing ut commodo\",\n    \"@schemaLocation\": \"http://ywlrIGd.meitQjgq.OlainmdAal5fnWNwsqppis\",\n    \"@type\": \"in proident veniam\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/{{basePath}}/:externalProjectId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{basePath}}",
+										":externalProjectId"
+									],
+									"variable": [
+										{
+											"key": "externalProjectId",
+											"value": "laboris eu",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Bad Requests",
+			"item": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "1Q2Hf68o0o9WfcJ6jwjx64ovAfZY7rqi8K4sJS8h",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://api.test.vantageapi.com"
+		},
+		{
+			"key": "basePath",
+			"value": "projectOutbound"
+		}
+	]
+}

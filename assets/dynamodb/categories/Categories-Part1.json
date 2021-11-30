@@ -1,0 +1,204 @@
+{
+  "vap-st-categories": [
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Tower"},
+          "SubCategory": {"S":"Concrete Tower"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Tower"},
+          "SubCategory": {"S":"Steel Lattice Tower"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Tower"},
+          "SubCategory": {"S":"Tower Movable"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Tower"},
+          "SubCategory": {"S":"Sweesite"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Tower"},
+          "SubCategory": {"S":"Tubular Steel Tower"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Tower"},
+          "SubCategory": {"S":"Wooden Tower"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Supply Technology"},
+          "SubCategory": {"S":"Air Conditioning"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Supply Technology"},
+          "SubCategory": {"S":"Battery"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Supply Technology"},
+          "SubCategory": {"S":"Electricity Connection"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Supply Technology"},
+          "SubCategory": {"S":"Emergency Power Supply"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Supply Technology"},
+          "SubCategory": {"S":"Generator"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Supply Technology"},
+          "SubCategory": {"S":"Lightning Protection/Antenna Earthing"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Supply Technology"},
+          "SubCategory": {"S":"Uninterruptible Power Supply UPS"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Supply Technology"},
+          "SubCategory": {"S":"Power Supply"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Implementation"},
+          "SubCategory": {"S":"Platforms"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Implementation"},
+          "SubCategory": {"S":"Poles / Mast"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Implementation"},
+          "SubCategory": {"S":"Stabilization"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Implementation"},
+          "SubCategory": {"S":"Structural Facilities"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Implementation"},
+          "SubCategory": {"S":"System Technology Rack"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Implementation"},
+          "SubCategory": {"S":"Technology Room"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Radio Equipment"},
+          "SubCategory": {"S":"Antenna"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Radio Equipment"},
+          "SubCategory": {"S":"Antenna Equipment"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Radio Equipment"},
+          "SubCategory": {"S":"Cable"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Radio Equipment"},
+          "SubCategory": {"S":"Radio Dish"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Category": {"S":"Radio Equipment"},
+          "SubCategory": {"S":"Radio Remote Unit"}
+        }
+      }
+    }
+  ]
+}

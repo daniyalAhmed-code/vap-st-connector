@@ -1,0 +1,214 @@
+{
+	"info": {
+		"_postman_id": "dd8264f2-c1cd-4f65-b674-bbb869a0903a",
+		"name": "Project",
+		"description": "This API provides operations to update and close a Project.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Good Requests",
+			"item": [
+				{
+					"name": "(root)",
+					"item": [
+						{
+							"name": "list Projects",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/{{basePath}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{basePath}}"
+									],
+									"query": [
+										{
+											"key": "fields",
+											"value": "laboris sit ad labor",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "{id}",
+					"item": [
+						{
+							"name": "close",
+							"item": [
+								{
+									"name": "close Project",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"closeDate\": \"1950-07-27\",\n    \"@baseType\": \"dolore ut Duis\",\n    \"@schemaLocation\": \"http://vmvmeYgbEqcvMGkThA.tlhogG5AQfqXJRHa,6MbrNlHX09C,dzVIKloQ6abOXcXQ8KURzbX8uJfxuxmT0qV\",\n    \"@type\": \"pariatur aute culpa\",\n    \"closeComment\": \"mollit enim\",\n    \"externalId\": \"eiusmod dolor\",\n    \"name\": \"dolore sit l\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/{{basePath}}/:id/close",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"{{basePath}}",
+												":id",
+												"close"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "laboris sit ad labor",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "patch Project",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"customerProjectManagerName\": \"ut culpa eiusmod qui sit\",\n    \"@baseType\": \"anim incididunt\",\n    \"@schemaLocation\": \"http://SMfB.smagRP6\",\n    \"@type\": \"consectetur cupidatat\",\n    \"externalId\": \"incididunt id ex non\",\n    \"name\": \"anim officia t\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/{{basePath}}/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{basePath}}",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "laboris sit ad labor",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "retrieve Project",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/{{basePath}}/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{basePath}}",
+										":id"
+									],
+									"query": [
+										{
+											"key": "fields",
+											"value": "laboris sit ad labor",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "laboris sit ad labor",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Bad Requests",
+			"item": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "1Q2Hf68o0o9WfcJ6jwjx64ovAfZY7rqi8K4sJS8h",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://api.test.vantageapi.com"
+		},
+		{
+			"key": "basePath",
+			"value": "project"
+		}
+	]
+}

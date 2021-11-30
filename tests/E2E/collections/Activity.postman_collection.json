@@ -1,0 +1,244 @@
+{
+	"info": {
+		"_postman_id": "0860e796-a5c4-4bf7-8c25-54fe1eda51ae",
+		"name": "Activity",
+		"description": "This API provides operations to create, update, get and delete activities related to the project.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Good Requests",
+			"item": [
+				{
+					"name": "(root)",
+					"item": [
+						{
+							"name": "create Activity",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"console.log(\"POST on url: '\" + pm.request.url.toString() + \"'\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Postman Test - {{$guid}}\",\n    \"projectId\": \"0053X00000CritmQAB\",\n    \"projectName\": \"P-000137\",\n    \"@baseType\": \"irure adipisicing sunt Lorem exercita\",\n    \"@schemaLocation\": \"https://GwCRVl.dqqrJ3W9sUvlJqqacQc2ur\",\n    \"@type\": \"Activity\",\n    \"actualDate\": \"2021-10-20T10:20:30.00Z\",\n    \"forecastlDate\": \"2021-12-20T10:20:30.00Z\",\n    \"type\": \"ad sed dolor officia reprehenderit\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/{{basePath}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{basePath}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "{id}",
+					"item": [
+						{
+							"name": "get Activity",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/{{basePath}}/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{basePath}}",
+										":id"
+									],
+									"query": [
+										{
+											"key": "fields",
+											"value": "magna",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "magna",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete Activity",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/{{basePath}}/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{basePath}}",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "magna",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "patch Activity",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"dolore adipisicing consectetur id\",\n    \"projectId\": \"Du\",\n    \"projectName\": \"nulla sint\",\n    \"@baseType\": \"irure adipisicing sunt Lorem exercita\",\n    \"@schemaLocation\": \"https://GwCRVl.dqqrJ3W9sUvlJqqacQc2ur\",\n    \"@type\": \"aliqua adipisic\",\n    \"actualDate\": \"2017-01-05T22:57:37.239Z\",\n    \"forecastlDate\": \"2016-12-10T10:58:15.961Z\",\n    \"type\": \"ad sed dolor officia reprehenderit\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/{{basePath}}/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{basePath}}",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "magna",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200, 201 or 204\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+							"})",
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Bad Requests",
+			"item": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "1Q2Hf68o0o9WfcJ6jwjx64ovAfZY7rqi8K4sJS8h",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://api.test.vantageapi.com"
+		},
+		{
+			"key": "basePath",
+			"value": "activity"
+		}
+	]
+}

@@ -1,0 +1,514 @@
+openapi: 3.0.0
+x-definitions:
+  x-amazon-apigateway-integration: &x-amazon-apigateway-integration
+  security: &security
+  x-amazon-apigateway-gateway-responses: &x-amazon-apigateway-gateway-responses
+  x-amazon-apigateway-request-validators: &x-amazon-apigateway-request-validators
+  securitySchemes: &securitySchemes
+  methodOptions: &methodsOptions
+servers:
+  - url: "https://api.test.vantageapi.com/{basePath}"
+    variables:
+      basePath:
+        default: "activityOutbound"
+    x-amazon-apigateway-endpoint-configuration:
+      disableExecuteApiEndpoint: true
+info:
+  description: This API provides operations to create, update, and delete activities related to the project.
+  version: 1.0.0
+  title: Activity Outbound
+tags:
+  - name: activityOutbound
+    description: Activity Outbound
+x-amazon-apigateway-gateway-responses: *x-amazon-apigateway-gateway-responses
+x-amazon-apigateway-request-validators: *x-amazon-apigateway-request-validators
+x-amazon-apigateway-request-validator: "full"
+paths:
+  /:
+    get:
+      x-amazon-apigateway-request-validator: full
+      security: *security
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - activityOutbound
+      summary: List or find Activity Outbound objects
+      description: This operation list of find Activity Outbound objects
+      operationId: listActivityOutbound
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityOutbound"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      x-amazon-apigateway-request-validator: full
+      security: *security
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      summary: Creates an Activity Outbound
+      description: This operation creates an Activity Outbound entity
+      operationId: createActivityOutbound
+      requestBody:
+        description: The Activity Outbound to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivityOutboundCreate"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActivityOutbound"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+    options: *methodsOptions
+  /{id}:
+    patch:
+      x-amazon-apigateway-request-validator: full
+      security: *security
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - activityOutbound
+      summary: Updates partially an Activity Outbound
+      description: This operation updates partially an Activity Outbound entity
+      operationId: patchActivityOutbound
+      parameters:
+        - name: id
+          in: path
+          description: Identifier of the Activity Outbound
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The Activity Outbound to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivityOutboundUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActivityOutbound"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+    options: *methodsOptions
+  /mno/{accountId}/activity/{id}:
+    delete:
+      x-amazon-apigateway-request-validator: full
+      security: *security
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      summary: Deletes an Activity Outbound
+      description: This operation deletes an Activity Outbound entity
+      operationId: deleteActivityOutbound
+      parameters:
+        - name: accountId
+          in: path
+          description: Identifier of the Account (MNO)
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: Identifier of the Activity Outbound
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Error"
+    options: *methodsOptions
+components:
+  schemas:
+    ActivityOutbound:
+      type: object
+      description: The root entity for Activity Outbound.
+      additionalProperties: false
+      properties:
+        id:
+          description: Unique identifier of the Activity Outbound
+          type: string
+          minLength: 1
+          maxLength: 18
+          example: a3S0D000000WhCGUA0
+        href:
+          description: Unique reference of the Activity Outbound
+          type: string
+        "@baseType":
+          description: When sub-classing, this defines the super-class
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name
+          type: string
+        name:
+          description: Name of the Activity Outbound
+          type: string
+          minLength: 1
+          maxLength: 80
+        projectId:
+          description: Id of the Project
+          type: string
+          minLength: 1
+          maxLength: 18
+        projectName:
+          description: Name of the Project
+          type: string
+          minLength: 1
+          maxLength: 80
+        type:
+          description: Type of the activity will always be a Milestone
+          type: string
+          example: Milestone
+        actualDate:
+          description: Actual date of the milestone
+          type: string
+          format: date
+          example: "2021-01-30"
+        forecastDate:
+          description: Forecast date of the milestone
+          type: string
+          format: date
+          example: "2021-01-30"
+        accountId:
+          description: Unique identifier of the Account (MNO)
+          type: string
+          minLength: 1
+          maxLength: 18
+        accountName:
+          description: Name of the Account (MNO)
+          type: string
+          minLength: 1
+          maxLength: 255
+    ActivityOutboundCreate:
+      type: object
+      description: The root entity for Activity Outbound. Skipped properties - href
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - projectId
+        - projectName
+        - type
+        - accountId
+        - accountName
+      properties:
+        id:
+          description: Unique identifier of the Activity Outbound
+          type: string
+          minLength: 1
+          maxLength: 18
+          example: a3S0D000000WhCGUA0
+        "@baseType":
+          description: When sub-classing, this defines the super-class
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name
+          type: string
+        name:
+          description: Name of the Activity Outbound
+          type: string
+          minLength: 1
+          maxLength: 80
+        projectId:
+          description: Id of the Project
+          type: string
+          minLength: 1
+          maxLength: 18
+        projectName:
+          description: Name of the Project
+          type: string
+          minLength: 1
+          maxLength: 80
+        type:
+          description: Type of the activity will always be a Milestone
+          type: string
+          example: Milestone
+        actualDate:
+          description: Actual date of the milestone
+          type: string
+          format: date
+          example: "2021-01-30"
+        forecastDate:
+          description: Forecast date of the milestone
+          type: string
+          format: date
+          example: "2021-01-30"
+        accountId:
+          description: Unique identifier of the Account (MNO)
+          type: string
+          minLength: 1
+          maxLength: 18
+        accountName:
+          description: Name of the Account (MNO)
+          type: string
+          minLength: 1
+          maxLength: 255
+    ActivityOutboundUpdate:
+      type: object
+      description: The root entity for Activity Outbound. Skipped properties - id, href
+      additionalProperties: false
+      required:
+        - name
+        - projectId
+        - projectName
+        - type
+        - accountId
+        - accountName
+      properties:
+        "@baseType":
+          description: When sub-classing, this defines the super-class
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name
+          type: string
+        name:
+          description: Name of the Activity Outbound
+          type: string
+          minLength: 1
+          maxLength: 80
+        projectId:
+          description: Id of the Project
+          type: string
+          minLength: 1
+          maxLength: 18
+        projectName:
+          description: Name of the Project
+          type: string
+          minLength: 1
+          maxLength: 80
+        type:
+          description: Type of the activity will always be a Milestone
+          type: string
+          example: Milestone
+        actualDate:
+          description: Actual date of the milestone
+          type: string
+          format: date
+          example: "2021-01-30"
+        forecastDate:
+          description: Forecast date of the milestone
+          type: string
+          format: date
+          example: "2021-01-30"
+        accountId:
+          description: Unique identifier of the Account (MNO)
+          type: string
+          minLength: 1
+          maxLength: 18
+        accountName:
+          description: Name of the Account (MNO)
+          type: string
+          minLength: 1
+          maxLength: 255
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - reason
+      properties:
+        code:
+          description: Application relevant detail, defined in the API or a common list.
+          type: string
+        reason:
+          description: Explanation of the reason for the error which can be shown to a client user.
+          type: string
+        message:
+          description: More details and corrective actions related to the error which can be shown to a client user.
+          type: string
+        status:
+          description: HTTP Error code extension
+          type: string
+        referenceError:
+          description: URI of documentation describing the error.
+          type: string
+          format: uri
+        "@baseType":
+          description: When sub-classing, this defines the super-class.
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name.
+          type: string
+  securitySchemes: *securitySchemes

@@ -1,0 +1,11 @@
+lambda:
+  source: "https://github.com/terraform-aws-modules/terraform-aws-lambda"
+  version: "v2.17.0"
+
+dynamodb:
+  source: "https://github.com/terraform-aws-modules/terraform-aws-dynamodb-table"
+  version: "v1.1.0"
+
+modules:
+  source: "https://git-codecommit.eu-central-1.amazonaws.com/v1/repos/vap-tf-modules"
+  version: "develop"

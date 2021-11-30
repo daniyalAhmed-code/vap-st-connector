@@ -1,0 +1,363 @@
+openapi: 3.0.0
+x-definitions:
+  Amazon:
+    x-amazon-apigateway-integration: &x-amazon-apigateway-integration
+      type: aws
+      httpMethod: POST
+      uri: arn:aws:apigateway:${REGION}:lambda:path/2015-03-31/functions/${DEVICE_TYPE_LAMBDA_ARN}/invocations
+      credentials: ${EXECUTION_ROLE_ARN}
+      requestTemplates:
+        application/json: |-
+          #set($inputRoot = $input.path('$'))
+          #set($allParams = $input.params())
+          {
+            "body-json" : {
+            #foreach($key in $inputRoot.keySet())
+              "$key": "$inputRoot[$key]"
+              #if( $foreach.hasNext ),#end
+            #end
+            },
+            "params" : {
+            #foreach($type in $allParams.keySet())
+              #set($params = $allParams.get($type))
+            "$type" : {
+              #foreach($paramName in $params.keySet())
+              "$paramName" : "$util.escapeJavaScript($params.get($paramName))"
+              #if($foreach.hasNext),#end
+              #end
+            }
+              #if($foreach.hasNext),#end
+            #end
+            },
+            "context" : {
+              "http-method" : "$context.httpMethod",
+              "request-id" : "$context.requestId",
+              "resource-path" : "$context.resourcePath",
+              "path" : "$context.path",
+              "user_id": "$context.authorizer.user_id"
+            }
+          }
+      responses:
+        default:
+          statusCode: "500"
+          responseTemplates:
+            application/json: |-
+              #set($inputRoot = $input.path('$'))
+              #if($inputRoot.statusCode != "")
+                  #set($context.responseOverride.status = $inputRoot.statusCode)
+                  $input.json("$.body")
+              #else
+                  {
+                    "code": "ERR001",
+                    "reason": "Internal Server Error"
+                    "message": $input.json("$.errorMessage")
+                  }
+              #end
+              #set($context.responseOverride.header.access-control-allow-origin = "*")
+      passthroughBehavior: when_no_templates
+    x-amazon-apigateway-gateway-responses:
+      &x-amazon-apigateway-gateway-responses
+      ACCESS_DENIED:
+        statusCode: 403
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR002\",\n  \"reason\": $context.error.messageString\n}"
+      API_CONFIGURATION_ERROR:
+        statusCode: 500
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR003\",\n  \"reason\": $context.error.messageString\n}"
+      AUTHORIZER_CONFIGURATION_ERROR:
+        statusCode: 500
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR004\",\n  \"reason\": $context.error.messageString\n}"
+      AUTHORIZER_FAILURE:
+        statusCode: 500
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR005\",\n  \"reason\": $context.error.messageString\n}"
+      BAD_REQUEST_BODY:
+        statusCode: 400
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR006\",\n  \"reason\": $context.error.messageString,\n  \"message\": $context.error.validationErrorString\n}"
+      BAD_REQUEST_PARAMETERS:
+        statusCode: 400
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR007\",\n  \"reason\": $context.error.messageString\n}"
+      DEFAULT_4XX:
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR008\",\n  \"reason\": $context.error.messageString\n}"
+      DEFAULT_5XX:
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR009\",\n  \"reason\": $context.error.messageString\n}"
+      EXPIRED_TOKEN:
+        statusCode: 403
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR010\",\n  \"reason\": $context.error.messageString\n}"
+      INTEGRATION_FAILURE:
+        statusCode: 504
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR011\",\n  \"reason\": $context.error.messageString\n}"
+      INTEGRATION_TIMEOUT:
+        statusCode: 504
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR012\",\n  \"reason\": $context.error.messageString\n}"
+      INVALID_API_KEY:
+        statusCode: 403
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR013\",\n  \"reason\": $context.error.messageString\n}"
+      INVALID_SIGNATURE:
+        statusCode: 403
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR014\",\n  \"reason\": $context.error.messageString\n}"
+      MISSING_AUTHENTICATION_TOKEN:
+        statusCode: 403
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR015\",\n  \"reason\": $context.error.messageString\n}"
+      QUOTA_EXCEEDED:
+        statusCode: 429
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR016\",\n  \"reason\": $context.error.messageString\n}"
+      REQUEST_TOO_LARGE:
+        statusCode: 413
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR017\",\n  \"reason\": $context.error.messageString\n}"
+      RESOURCE_NOT_FOUND:
+        statusCode: 404
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR018\",\n  \"reason\": $context.error.messageString\n}"
+      THROTTLED:
+        statusCode: 429
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR019\",\n  \"reason\": $context.error.messageString\n}"
+      UNAUTHORIZED:
+        statusCode: 401
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR020\",\n  \"reason\": $context.error.messageString\n}"
+      UNSUPPORTED_MEDIA_TYPE:
+        statusCode: 415
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR021\",\n  \"reason\": $context.error.messageString\n}"
+      WAF_FILTERED:
+        statusCode: 403
+        responseTemplates:
+          application/json: "{\n  \"code\": \"ERR022\",\n  \"reason\": $context.error.messageString\n}"
+        security: &security
+          - authorizer: []
+          # - api_key: []
+    x-amazon-apigateway-request-validators:
+      &x-amazon-apigateway-request-validators
+      full:
+        validateRequestBody: true
+        validateRequestParameters: true
+      body-only:
+        validateRequestBody: true
+        validateRequestParameters: false
+  securitySchemes: &securitySchemes
+    authorizer:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "custom"
+      x-amazon-apigateway-authorizer:
+        authorizerUri: "${AUTHORIZER_LAMBDA_URI}"
+        authorizerCredentials: "${EXECUTION_ROLE_ARN}"
+        authorizerResultTtlInSeconds: 0
+        identitySource: "method.request.header.x-api-key"
+        type: "request"
+  schemas:
+    DeviceType:
+      DeviceTypeOtherProperties: &DeviceTypeOtherProperties
+        primaryUom:
+          description: Unit of measure used when the item is consumed
+          type: string
+          enum:
+            - Each
+            - Box
+            - Feet
+            - Meters
+            - Hours
+            - Days
+          example: Each
+        category:
+          description: Grouping of similar Items, enabling filtering and searching
+          type: string
+          example: Tower
+        subcategory:
+          description: Grouping within the parent category
+          type: string
+          example: Concrete Tower
+        type:
+          description: The type of Item. Only Material and Tool/Equipment can be made Available for Receipt and require a Usage Type and Tracking Method. Other Types (Labor, Service, Expense) cannot use those fields
+          type: string
+          enum:
+            - Material
+            - Tool/Equipment
+            - Labor
+            - Service
+            - Expense
+            - Standard System
+          example: Material
+        subtype:
+          description: Field that falls within the hierarchy of the "Type" chosen for this record
+          type: string
+          maxLength: 155
+          example:
+        status:
+          description: Indicates whether the item is available for use, or whether it is available for use under special permission from the lifecycle manager
+          type: string
+          enum:
+            - "Yes"
+            - "No"
+            - "Yes with confirmation from Lifecycle Manager"
+          example: Yes
+        trackingMethod:
+          description: Indicates whether the item is available for use, or whether it is available for use under special permission from the lifecycle manager
+          type: string
+          enum:
+            - Uniquely Tracked
+            - Quantity Tracked
+            - Container Tracked
+          example: Container Tracked
+        usageType:
+          description: Indicates whether the item is available for use, or whether it is available for use under special permission from the lifecycle manager
+          type: string
+          enum:
+            - Installable
+            - Consumable
+            - Tool/Equipment
+          example: Installable
+        beginOfLife:
+          description: Date this item was manufactured or certificate
+          type: string
+          format: date-time
+          example: "2021-01-30T08:30:00Z"
+        endOfLife:
+          description: The expiration date of this item
+          type: string
+          format: date-time
+          example: "2021-01-30T08:30:00Z"
+        endOfService:
+          description: Date that the item has been discontinued. End of Service of this item. If applicable
+          type: string
+          format: date-time
+          example: "2021-01-30T08:30:00Z"
+        dimensionWeight:
+          description: The weight of the item in kilograms. Number (16 int, 2 decimal)
+          type: number
+          format: double
+          example:
+        dimensionWidth:
+          description: The Width of the item. Width, Height, Depth and Diameter need to have the same dimension unit, as fixed in the field "General Dimensions Unit". Number (16 int, 2 decimal)
+          type: number
+          format: double
+          example:
+        dimensionHeight:
+          description: The Height of the item. Height, Width, Depth and Diameter need to have the same dimension unit, as fixed in the field "General Dimensions Unit". Number (16 int, 2 decimal)
+          type: number
+          format: double
+          example:
+        dimensionLength:
+          description: Length of the Item (using Dimensions Unit). Number (16 int, 2 decimal)
+          type: number
+          format: double
+          example:
+        dimensionUnit:
+          description: The unit of measure for the dimensions of the items fields height, width, and depth
+          type: string
+          enum:
+            - in
+            - ft
+            - mn
+            - cm
+            - m
+          example: cm
+        powerConsumption:
+          description: Maximum power consumption of an item (in Watt) for calculation of total power supply and total heat load. Number (12 int, 2 decimal)
+          type: number
+          format: double
+          example:
+        coolingCapacity:
+          description: TGE cooling capacity of the item in British Temperature Unit (BTU - 1 Watt = 0,29351 BTU). Number (16 int, 2 decimal)
+          type: number
+          format: double
+          example:
+      DeviceTypeName: &DeviceTypeName
+        name:
+          description: Unique Identification. The MNO short name will be add automatically before the device type name.
+          type: string
+          minLength: 1
+          maxLength: 73
+          example: VFDE - Device Type Name
+      DeviceTypeId: &DeviceTypeId
+        id:
+          description: Unique identifier of the Device Type
+          type: string
+          minLength: 1
+          maxLength: 18
+          example: a3S0D000000WhCGUA0
+      DeviceTypeMarket: &DeviceTypeMarket
+        market:
+          description: Market this item belongs to.
+          type: string
+          enum:
+            - CZ
+            - DE
+            - ES
+            - GR
+            - HU
+            - IE
+            - PT
+            - RO
+            - VF
+          example: PT
+      DeviceTypeHref: &DeviceTypeHref
+        href:
+          description: Unique reference of the Device Type
+          type: string
+      DeviceTypeAtType: &DeviceTypeAtType
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name
+          type: string
+  Methods:
+    options: &methodsOptions
+      responses:
+        "200":
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Headers: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: '{"statusCode": 200}'
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  Parameters:
+    fields: &parametersFields
+      name: fields
+      description: Comma-separated properties to be provided in response
+      in: query
+      schema:
+        type: string
+    next: &parametersNext
+      name: next
+      description: Next Records URL
+      required: false
+      in: query
+      schema:
+        type: string

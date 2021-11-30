@@ -1,0 +1,32 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14.x
+    commands:
+      - echo "Download newman"
+#      - cd "$CODEBUILD_SRC_DIR/tests/E2E"
+#      - npm install
+#
+#  pre_build:
+#    commands:
+#      - cd "$CODEBUILD_SRC_DIR/tests/E2E"
+#      - echo "Creating reports folder"
+#      - mkdir reports
+#
+#  build:
+#    commands:
+#      - cd "$CODEBUILD_SRC_DIR"
+#      - echo "Runing NodeJS script..."
+#      - node tests/E2E/index.js
+#
+#  post_build:
+#    commands:
+#     - echo "Reports generated will be sent to Report group"
+#
+#reports:
+#  newman-reports:
+#    files:
+#      - tests/E2E/reports/*.xml
+#    file-format: "JUNITXML"

@@ -1,0 +1,65 @@
+version: 0.2
+
+env:
+  git-credential-helper: yes
+  exported-variables:
+    - critical_checks
+    - high_checks
+    - medium_checks
+    - low_checks
+  variables:
+    TFSEC_VERSION: "0.58.9"
+    TF_VERSION: "0.15.5"
+    TERRAFILE_VERSION: "0.6"
+
+phases:
+  install:
+    commands:
+      - cd /usr/bin
+#      - echo "Download tfsec v${TFSEC_VERSION}"
+#      - curl -Lso tfsec https://github.com/tfsec/tfsec/releases/download/v${TFSEC_VERSION}/tfsec-linux-amd64
+#      - chmod +x tfsec
+#      - echo "Download terraform"
+#      - curl -s -qL -o terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
+#      - unzip -o terraform.zip
+#      - echo "Download Terrafile"
+#      - wget "https://github.com/coretech/terrafile/releases/download/v${TERRAFILE_VERSION}/terrafile_${TERRAFILE_VERSION}_Linux_x86_64.tar.gz"
+#      - tar -xf terrafile_${TERRAFILE_VERSION}_Linux_x86_64.tar.gz -C /usr/bin && rm terrafile_${TERRAFILE_VERSION}_Linux_x86_64.tar.gz
+#  build:
+#    commands:
+#      - cd "${CODEBUILD_SRC_DIR}"
+#      - echo "Run Terrafile to download the required modules"
+#      - mkdir -p .terraform/modules
+#      - /usr/bin/terrafile -p .terraform/modules
+#      - /usr/bin/terrafile -p vendor
+#      - echo "Runing terraform init"
+#      - terraform init -no-color
+#      - echo "Run tfsec v${TFSEC_VERSION}"
+#      - mkdir results
+#      - tfsec -s --format junit --out results/results.xml --exclude-downloaded-modules
+#
+#  post_build:
+#    commands:
+#      - num_critical=`cat results/results.xml | grep CRITICAL | wc -l`
+#      - echo "Number of CRITICAL problems:"" $num_critical"
+#      - export critical_checks=$num_critical
+#      - num_high=`cat results/results.xml | grep HIGH | wc -l`
+#      - echo "Number of HIGH problems:"" $num_high"
+#      - export high_checks=$num_high
+#      - num_medium=`cat results/results.xml | grep MEDIUM | wc -l`
+#      - echo "Number of MEDIUM problems:"" $num_medium"
+#      - export medium_checks=$num_medium
+#      - num_low=`cat results/results.xml | grep LOW | wc -l`
+#      - echo "Number of LOW problems:"" $num_low"
+#      - export low_checks=$num_low
+#      - echo "Exporting Env vars for manual approval external link"
+#      - export BuildID=`echo $CODEBUILD_BUILD_ID | cut -d:"" -f1`
+#      - export BuildTag=`echo $CODEBUILD_BUILD_ID | cut -d:"" -f2`
+#      - export Region=$AWS_REGION
+#      - if [ $(($critical_checks + $high_checks + $num_medium + $num_low)) -gt 0 ]; then echo "Errors found, exiting..."; exit 1; else echo "No errors found, continuing"; fi
+#
+#reports:
+#  tfsec-reports:
+#    files:
+#      - results/results.xml
+#    file-format: "JUNITXML"

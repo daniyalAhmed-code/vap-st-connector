@@ -1,0 +1,44 @@
+version: 0.2
+env:
+  git-credential-helper: yes
+  variables:
+    TF_VERSION: "0.15.5"
+    TERRAFILE_VERSION: "0.6"
+phases:
+  install:
+    commands:
+      - cd /usr/bin
+      - curl -s -qL -o terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
+      - unzip -o terraform.zip
+      - wget "https://github.com/coretech/terrafile/releases/download/v${TERRAFILE_VERSION}/terrafile_${TERRAFILE_VERSION}_Linux_x86_64.tar.gz"
+      - tar -xf terrafile_${TERRAFILE_VERSION}_Linux_x86_64.tar.gz -C /usr/bin && rm terrafile_${TERRAFILE_VERSION}_Linux_x86_64.tar.gz
+
+  pre_build:
+    commands:
+      - docker pull public.ecr.aws/j9c7g0r1/lambda_python:latest
+      - if [ $TF_STAGE = "apply" ]; then echo "Copying $CODEBUILD_SRC_DIR_TerraformPlan/${TF_PLAN_FILE_NAME} to $CODEBUILD_SRC_DIR" ; cp -r $CODEBUILD_SRC_DIR_TerraformPlan/${TF_PLAN_FILE_NAME} $CODEBUILD_SRC_DIR ; echo "Copying $CODEBUILD_SRC_DIR_TerraformPlan/builds to $CODEBUILD_SRC_DIR"; cp -r $CODEBUILD_SRC_DIR_TerraformPlan/builds $CODEBUILD_SRC_DIR ; fi
+
+  build:
+    commands:
+      - cd "$CODEBUILD_SRC_DIR"
+      - sed -i -e "s/{{ENV}}/$TF_VAR_ENV/" terraform.tf
+      - echo "Run terrafile to download the required modules"
+      # - mkdir -p .terraform/modules
+      # - /usr/bin/terrafile -p .terraform/modules
+      - /usr/bin/terrafile -p vendor
+      - echo "Run Terraform init"
+      - terraform init -no-color
+      - echo "Run Terraform $TF_STAGE"
+      - terraform $TF_ACTION -no-color
+
+  post_build:
+    commands:
+      #- if [ $TF_STAGE = "apply" ]; then cat "$CODEBUILD_SRC_DIR/templates/result.yaml" ; fi
+      - echo "terraform $TF_ACTION on $TF_VAR_ENV completed"
+
+artifacts:
+  name: TerraformPlan
+  discard-paths: no
+  files:
+    - ${TF_PLAN_FILE_NAME}
+    - builds/*

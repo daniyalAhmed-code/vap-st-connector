@@ -1,0 +1,423 @@
+# NOTE: this file needs to be pre-pocessed before importing in AWS API Gateway
+# Online pre-processor: https://onlineyamltools.com/convert-yaml-to-json
+openapi: 3.0.0
+x-definitions:
+  x-amazon-apigateway-integration: &x-amazon-apigateway-integration
+  x-amazon-apigateway-gateway-responses: &x-amazon-apigateway-gateway-responses
+  x-amazon-apigateway-request-validators: &x-amazon-apigateway-request-validators
+  security: &security
+  securitySchemes: &securitySchemes
+  DeviceTypeOtherProperties: &DeviceTypeOtherProperties
+  DeviceTypeName: &DeviceTypeName
+  DeviceTypeId: &DeviceTypeId
+  DeviceTypeMarket: &DeviceTypeMarket
+  DeviceTypeHref: &DeviceTypeHref
+  DeviceTypeAtType: &DeviceTypeAtType
+servers:
+  - url: "https://api.test.vantageapi.com/{basePath}"
+    variables:
+      basePath:
+        default: "/deviceType"
+    x-amazon-apigateway-endpoint-configuration:
+      disableExecuteApiEndpoint: true
+info:
+  description: "The API provides a catalog of device types. Device Type API performs the following operations:\n- Retrieve a device type or a collection of device types\n- Partial update of a device type (including updating rules)\n- Create a device type (including default values and creation rules)"
+  version: 1.0.0
+  title: Device Type
+tags:
+  - name: deviceType
+    description: Device Type
+x-amazon-apigateway-gateway-responses: *x-amazon-apigateway-gateway-responses
+x-amazon-apigateway-request-validators: *x-amazon-apigateway-request-validators
+x-amazon-apigateway-request-validator: "full"
+paths:
+  /:
+    post:
+      x-amazon-apigateway-request-validator: full
+      security: *security
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - deviceType
+      summary: Creates a Device Type
+      description: This operation creates a Device Type entity
+      operationId: createDeviceType
+      requestBody:
+        description: The Device type to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceTypeCreate"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceType"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      x-amazon-apigateway-request-validator: full
+      security: *security
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - deviceType
+      summary: List or find Device Types objects
+      description: This operation list of find Device Types
+      operationId: listDeviceTypes
+      parameters:
+        - name: fields
+          description: Comma-separated properties to be provided in response
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: next
+          description: Next Records URL
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceType"
+        "206":
+          description: Partial Content
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    options:
+      #      security:
+      #        - authorizer: [ ]
+      responses:
+        "200":
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: '{"statusCode": 200}'
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /{id}:
+    get:
+      x-amazon-apigateway-request-validator: full
+      security: *security
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - deviceType
+      summary: Retrieves a DeviceType by ID
+      description: This operation retrieves a DeviceType entity. Attribute selection is enabled for all first level attributes.
+      operationId: retrieveDeviceType
+      parameters:
+        - name: id
+          description: Identifier of the DeviceType
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceType"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      x-amazon-apigateway-request-validator: full
+      security: *security
+      x-amazon-apigateway-integration: *x-amazon-apigateway-integration
+      tags:
+        - deviceType
+      summary: Updates partially a Device Type
+      description: This operation updates partially a Device Type entity
+      operationId: patchDeviceType
+      parameters:
+        - name: id
+          in: path
+          description: Identifier of the Device Type
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The Device Type to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeviceTypeUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceType"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    options:
+      #      security:
+      #        - authorizer: [ ]
+      responses:
+        "200":
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,PATCH'"
+              method.response.header.Access-Control-Allow-Headers: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: '{"statusCode": 200}'
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+components:
+  schemas:
+    DeviceType:
+      type: object
+      additionalProperties: false
+      properties:
+        <<: *DeviceTypeId
+        <<: *DeviceTypeName
+        <<: *DeviceTypeHref
+        <<: *DeviceTypeAtType
+        <<: *DeviceTypeOtherProperties
+        <<: *DeviceTypeMarket
+    DeviceTypeCreate:
+      type: object
+      description: The root entity for Device Type. Skipped properties - id, href
+      required:
+        - name
+        - primaryUom
+        - category
+        - subcategory
+        - type
+        - subtype
+        - status
+        - trackingMethod
+        - usageType
+      additionalProperties: false
+      properties:
+        <<: *DeviceTypeName
+        <<: *DeviceTypeOtherProperties
+    DeviceTypeUpdate:
+      type: object
+      description: The root entity for Device Type. Skipped properties - id,href
+      additionalProperties: false
+      properties:
+        <<: *DeviceTypeOtherProperties
+    Error:
+      type: object
+      required:
+        - code
+        - reason
+      properties:
+        code:
+          description: Application relevant detail, defined in the API or a common list.
+          type: string
+        reason:
+          description: Explanation of the reason for the error which can be shown to a client user.
+          type: string
+        message:
+          description: More details and corrective actions related to the error which can be shown to a client user.
+          type: string
+        status:
+          description: HTTP Error code extension
+          type: string
+        referenceError:
+          description: URI of documentation describing the error.
+          type: string
+          format: uri
+        "@baseType":
+          description: When sub-classing, this defines the super-class.
+          type: string
+        "@schemaLocation":
+          description: A URI to a JSON-Schema file that defines additional attributes and relationships
+          type: string
+          format: uri
+        "@type":
+          description: When sub-classing, this defines the sub-class entity name.
+          type: string
+    Empty:
+      title: "Empty"
+      type: "object"
+  securitySchemes: *securitySchemes
