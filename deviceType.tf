@@ -21,6 +21,8 @@ module "device_type_lambda" {
     SITETRACKER_USER_TABLE = data.terraform_remote_state.infra.outputs.DEV_PORTAL_CUSTOMERS_TABLE_NAME
     KMS_KEY_ID             = data.terraform_remote_state.infra.outputs.kms_key_id
   }
+  vpc_security_group_ids = [data.terraform_remote_state.infra.outputs.default_sg_id, data.terraform_remote_state.infra.outputs.allow_lambda_communication_sg]
+  vpc_subnet_ids         = data.terraform_remote_state.infra.outputs.internal_subnets
   cloudwatch_logs_retention_in_days = var.logs_retention_days
   attach_policy_json                = true
   policy_json                       = <<EOF
@@ -56,7 +58,28 @@ module "device_type_lambda" {
                 ]
               }
             }
-        }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+              "ec2:DescribeNetworkInterfaces",
+              "ec2:CreateNetworkInterface",
+              "ec2:DeleteNetworkInterface",
+              "ec2:DescribeInstances",
+              "ec2:AttachNetworkInterface"
+            ],
+            "Resource": "*"
+          },
+        {
+    "Effect": "Allow",
+    "Action": [
+        "kms:Decrypt",
+        "kms:Encrypt"
+    ],
+    "Resource": [
+        "*"
+    ]
+    }
     ]
 }
 EOF
